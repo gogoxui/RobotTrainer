@@ -1,7 +1,6 @@
 package com.example.gogoxui.robottrainer;
 
 import android.content.Context;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import org.litepal.crud.DataSupport;
@@ -33,11 +32,26 @@ public class checkRobot {
         for (Wordlist wl:wls){
             Pattern pattern = Pattern.compile(wl.getTriggerWord());
             Matcher matcher = pattern.matcher(iw);
+            //Matcher haveName = Pattern.compile("\\?\\<.*\\>").matcher(wl.getTriggerWord());
             if (matcher.matches()){
-                returnword = wl.getReactionWord();
-                Toast.makeText(context,"Trigger is:"+wl.getTriggerWord(),Toast.LENGTH_SHORT).show();
-                Toast.makeText(context,"Reactioni is:"+wl.getReactionWord(),Toast.LENGTH_SHORT).show();
+                //if (!haveName.find()){
+                    //returnword = wl.getReactionWord();
+                    //returnword = matcher.replaceAll(wl.getReactionWord());
+
+                String newword = matcher.replaceAll(wl.getReactionWord());
+                Toast.makeText(context,"Trigger is:"+wl.getTriggerWord()+"\nReactioni is:"+newword,Toast.LENGTH_LONG).show();
+                returnword = newword;
+                //Toast.makeText(context,"Reactioni is:"+wl.getReactionWord(),Toast.LENGTH_SHORT).show();
+                  //break;
+                //}else {
+                    //String word1 = haveName.group("name1");
+
+                    //Toast.makeText(context,"I said"+returnword,Toast.LENGTH_SHORT).show();
+                    //
                 break;
+                //}
+
+
             }
         }
 

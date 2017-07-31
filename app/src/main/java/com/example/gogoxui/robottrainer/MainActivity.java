@@ -2,7 +2,6 @@ package com.example.gogoxui.robottrainer;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,8 +22,6 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
     private Button bt_listen;
@@ -43,7 +39,10 @@ public class MainActivity extends AppCompatActivity {
     private WordlistAdapter adapter;
     private CheckWordlist cwl = new CheckWordlist();
     private ArrayList<String> mData ;
-    //private View view;
+    //private List<Wordlist> wl_speedrate = DataSupport.select("name = ?","speedrate").find(Wordlist.class);
+    //private String st_speedrate = wl_speedrate.get(0).getReactionWord();
+    //private Wordlist wl_pitch = DataSupport.select("name = ?","pitch").findFirst(Wordlist.class);
+
 
 
     public void sayNow(String w){
@@ -55,8 +54,15 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+//////////////////////////////////////
         LitePal.getDatabase();
+        final String st_speedrate = DataSupport.find(Wordlist.class,1).getReactionWord();
+        final String st_pitch = DataSupport.find(Wordlist.class,2).getReactionWord();
+        //final float speedrate = Float.parseFloat(st_speedrate);
+        //final float pitch = Float.parseFloat(st_pitch);
+
+        //Toast.makeText(this,st_speedrate,Toast.LENGTH_SHORT).show();
+//////////////////////////////////////
         //view.getRootView();
         bt_listen = (Button) this.findViewById(R.id.listen);
 
@@ -71,7 +77,12 @@ public class MainActivity extends AppCompatActivity {
         ed_name = (EditText) this.findViewById(R.id.input_name);
         ed_id = (TextView) this.findViewById(R.id.ed_id);
         ed_reaction = (EditText) this.findViewById(R.id.input_reaction);
-        //final CheckWordlist cwl = new CheckWordlist();
+
+        //final float speedRate = Float.parseFloat(st_speedrate);
+        //final float pitch = Float.parseFloat(wl_pitch.getReactionWord());
+        //float speedRate = (float) 1.5;
+        //float pitch = (float) 1.5;
+                //final CheckWordlist cwl = new CheckWordlist();
 
         //for(int i = 0; i < 50; i++) {
         //    mData.add("項目"+i);
@@ -79,11 +90,18 @@ public class MainActivity extends AppCompatActivity {
 
         showList();
 
+
         tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
                 tts.setLanguage(new Locale("yue","HK"));
-                tts.setSpeechRate((float)1.5);
+                if (isFloat(st_speedrate)|isFloat(st_pitch)){
+                    tts.setSpeechRate(Float.parseFloat(st_speedrate));
+                    tts.setPitch(Float.parseFloat(st_pitch));
+                } else {
+                    tts.setSpeechRate((float)1.0);
+                    tts.setPitch((float)1.0);
+                }
             }
         });
 
@@ -202,8 +220,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String beforeId = ed_id.getText().toString();
-                        DataSupport.deleteAll(Wordlist.class, "id = ?", beforeId);
-                        //tv_show.setText(cwl.checkList());
+                        Wordlist wl1 = new Wordlist();
+                        wl1.setName("保留位置："+ beforeId);
+                        wl1.setReactionWord("");
+                        wl1.setTriggerWord("");
+                        wl1.updateAll("id = ?",beforeId);
                         showList();
                     } })
                 .create().show();
@@ -233,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
         ;
     }
 
+
     public void createWord(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Title")
@@ -252,7 +274,21 @@ public class MainActivity extends AppCompatActivity {
                         showList();
                     } })
                 .create().show();
-        ;
+    }
+
+    public boolean isFloat(String str) {
+        try {
+            Float.parseFloat(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        tts.shutdown();
     }
 
 }

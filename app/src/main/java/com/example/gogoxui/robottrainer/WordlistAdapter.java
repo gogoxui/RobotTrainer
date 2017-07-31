@@ -24,6 +24,7 @@ public class WordlistAdapter
     private EditText mRegex;
     private EditText mReacion;
     private TextView mId;
+    private int dataSize;
 
 
     //private View mView;
@@ -41,6 +42,7 @@ public class WordlistAdapter
         mRegex = regex;
         mReacion = reaction;
         mData = data;
+        dataSize = mData.size()-1;
 
     }
 
@@ -63,14 +65,16 @@ public class WordlistAdapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position){
-        holder.tv.setText(mData.get(position));
+        holder.tv.setText(mData.get(dataSize-position));
         holder.bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRegex.setText(wls.get(position).getTriggerWord());
-                mReacion.setText(wls.get(position).getReactionWord());
-                mName.setText(wls.get(position).getName());
-                mId.setText(""+ wls.get(position).getId());
+                mRegex.setText(wls.get(dataSize-position).getTriggerWord());
+                mReacion.setText(wls.get(dataSize-position).getReactionWord());
+                mName.setText(wls.get(dataSize-position).getName());
+                mId.setText(""+ wls.get(dataSize-position).getId());
+                //mName.setText(""+dataSize);
+                //mId.setText(""+position);
                 Toast.makeText(view.getContext(),
                         "已回调数据",Toast.LENGTH_SHORT).show();
             }
