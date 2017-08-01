@@ -55,11 +55,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //////////////////////////////////////
+
+        /////////創建DB框架/////////
         LitePal.getDatabase();
-        final String st_speedrate = DataSupport.find(Wordlist.class,1).getReactionWord();
-        final String st_pitch = DataSupport.find(Wordlist.class,2).getReactionWord();
-        //final float speedrate = Float.parseFloat(st_speedrate);
-        //final float pitch = Float.parseFloat(st_pitch);
+        /////////檢查初始DB/////////
+        checkDB();
+        /////////載入TTS設定////////
+        String st_speedrate = DataSupport.find(Wordlist.class,1).getReactionWord();
+        String st_pitch = DataSupport.find(Wordlist.class,2).getReactionWord();
+        final float speedrate = Float.parseFloat(st_speedrate);
+        final float pitch = Float.parseFloat(st_pitch);
 
         //Toast.makeText(this,st_speedrate,Toast.LENGTH_SHORT).show();
 //////////////////////////////////////
@@ -95,13 +100,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onInit(int i) {
                 tts.setLanguage(new Locale("yue","HK"));
-                if (isFloat(st_speedrate)|isFloat(st_pitch)){
-                    tts.setSpeechRate(Float.parseFloat(st_speedrate));
-                    tts.setPitch(Float.parseFloat(st_pitch));
-                } else {
-                    tts.setSpeechRate((float)1.0);
-                    tts.setPitch((float)1.0);
-                }
+                //if (isFloat(st_speedrate)|isFloat(st_pitch)){
+                //    tts.setSpeechRate(Float.parseFloat(st_speedrate));
+                //    tts.setPitch(Float.parseFloat(st_pitch));
+                //} else {
+                    tts.setSpeechRate((float)speedrate);
+                    tts.setPitch((float)pitch);
+                //}
             }
         });
 
@@ -282,6 +287,32 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } catch (NumberFormatException e) {
             return false;
+        }
+    }
+
+    public void initDB(){
+        Wordlist wl1 = new Wordlist();
+        wl1.setName("tts_speedrate");
+        wl1.setTriggerWord("@");
+        wl1.setReactionWord("1.0");
+        wl1.saveOrUpdate("id = ?","1");
+        Wordlist wl2 = new Wordlist();
+        wl2.setName("tts_pitch");
+        wl2.setTriggerWord("@");
+        wl2.setReactionWord("1.0");
+        wl2.saveOrUpdate("id = ?","2");
+    }
+
+    private void checkDB(){
+        try {
+            String test_speedrate = DataSupport.find(Wordlist.class,1).getReactionWord();
+            String test_pitch = DataSupport.find(Wordlist.class,2).getReactionWord();
+            float speedRate = Float.parseFloat(test_speedrate);
+            float pitch = Float.parseFloat(test_pitch);
+            Toast.makeText(this,"已載入DB!",Toast.LENGTH_SHORT).show();
+        }catch (NumberFormatException e) {
+            initDB();
+            Toast.makeText(this,"已新建DB!",Toast.LENGTH_SHORT).show();
         }
     }
 
