@@ -29,7 +29,7 @@ public class checkRobot {
         ArrayList<String> resultList = new ArrayList<String>();
         //size = wls.size();
         //boolean goon = true;
-        Toast.makeText(context,"Input is:"+iw,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context,"Input is:"+iw,Toast.LENGTH_SHORT).show();
 
         //Toast.makeText(,"Regex is:"+tr,Toast.LENGTH_SHORT).show();
 
@@ -43,9 +43,9 @@ public class checkRobot {
                     //returnword = matcher.replaceAll(wl.getReactionWord());
 
                 String newword = matcher.replaceAll(wl.getReactionWord());
-                //Toast.makeText(context,"Trigger is:"+wl.getTriggerWord()+"\nReactioni is:"+newword,Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"Trigger is:"+wl.getTriggerWord()+"\nReactioni is:"+newword,Toast.LENGTH_LONG).show();
                 //returnword = newword;
-                //Toast.makeText(context,"Reactioni is:"+wl.getReactionWord(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"Reactioni is:"+wl.getReactionWord(),Toast.LENGTH_SHORT).show();
                   //break;
                 //}else {
                     //String word1 = haveName.group("name1");
@@ -68,6 +68,7 @@ public class checkRobot {
             //Toast.makeText(context,"共有"+(listSize-1)+"個結果，顯示第"+wordOfList+"個",Toast.LENGTH_LONG).show();
             //returnword = resultList.get((int) Math.random()*listSize +1 );
         }else{
+            Toast.makeText(context,"無找到結果",Toast.LENGTH_LONG).show();
             returnword = dontKnowWhat();
         }
 

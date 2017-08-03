@@ -45,10 +45,6 @@ public class CheckWordlist  {
         return wordToList;
     }
 
-    public static String getReaction(){
-        String reaction = new String();
-        return reaction;
-    }
 
 
 }

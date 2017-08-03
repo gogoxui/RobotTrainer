@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onInit(int i) {
                 final Locale tts_language = localeCallBack();
-                String st_speedrate = DataSupport.find(Wordlist.class,1).getReactionWord();
-                String st_pitch = DataSupport.find(Wordlist.class,2).getReactionWord();
+                String st_speedrate = DataSupport.find(Wordlist.class,2).getReactionWord();
+                String st_pitch = DataSupport.find(Wordlist.class,3).getReactionWord();
                 float speedrate = Float.parseFloat(st_speedrate);
                 float pitch = Float.parseFloat(st_pitch);
                 tts.setLanguage(tts_language);
@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
                 tts.setSpeechRate((float)speedrate);
                 tts.setPitch((float)pitch);
             }});
+
+
 
 
         //Toast.makeText(this,st_speedrate,Toast.LENGTH_SHORT).show();
@@ -291,39 +293,44 @@ public class MainActivity extends AppCompatActivity {
 
     public void initDB(){
         Wordlist wl1 = new Wordlist();
-        wl1.setName("tts_speedrate");
+        wl1.setName("Version");
         wl1.setTriggerWord("@");
         wl1.setReactionWord("1.0");
         wl1.saveOrUpdate("id = ?","1");
         Wordlist wl2 = new Wordlist();
-        wl2.setName("tts_pitch");
+        wl2.setName("tts_speedrate");
         wl2.setTriggerWord("@");
         wl2.setReactionWord("1.0");
         wl2.saveOrUpdate("id = ?","2");
         Wordlist wl3 = new Wordlist();
-        wl3.setName("tts_language(1=yue,2=jp,3=us)");
+        wl3.setName("tts_pitch");
         wl3.setTriggerWord("@");
-        wl3.setReactionWord("1");
+        wl3.setReactionWord("1.0");
         wl3.saveOrUpdate("id = ?","3");
         Wordlist wl4 = new Wordlist();
-        wl4.setName("noResult");
+        wl4.setName("tts_language(1=yue,2=jp,3=us)");
         wl4.setTriggerWord("@");
-        wl4.setReactionWord("你噏咩呀");
+        wl4.setReactionWord("1");
         wl4.saveOrUpdate("id = ?","4");
+        Wordlist wl5 = new Wordlist();
+        wl5.setName("noResult");
+        wl5.setTriggerWord("@");
+        wl5.setReactionWord("你噏咩呀");
+        wl5.saveOrUpdate("id = ?","5");
     }
 
     private void checkDB(){
         try {
-            String test_speedrate = DataSupport.find(Wordlist.class,1).getReactionWord();
-            String test_pitch = DataSupport.find(Wordlist.class,2).getReactionWord();
-            String language = DataSupport.find(Wordlist.class,3).getReactionWord();
-            String noresult = DataSupport.find(Wordlist.class,4).getName();;
+            String test_speedrate = DataSupport.find(Wordlist.class,2).getReactionWord();
+            String test_pitch = DataSupport.find(Wordlist.class,3).getReactionWord();
+            String language = DataSupport.find(Wordlist.class,4).getReactionWord();
+            String noresult = DataSupport.find(Wordlist.class,5).getName();;
             float speedRate = Float.parseFloat(test_speedrate);
             float pitch = Float.parseFloat(test_pitch);
             int key = Integer.parseInt(language);
-            //boolean testnoresult = "noResult";
+            //if(noresult != "noResult"){initDB();}
             Toast.makeText(this,"已載入DB!",Toast.LENGTH_SHORT).show();
-        }catch (NumberFormatException e) {
+        }catch (Exception e) {
             initDB();
             Toast.makeText(this,"已新建DB!",Toast.LENGTH_SHORT).show();
         }
@@ -401,7 +408,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public Locale localeCallBack(){
-        String st_language = DataSupport.find(Wordlist.class,3).getReactionWord();
+        String st_language = DataSupport.find(Wordlist.class,4).getReactionWord();
         int key = Integer.parseInt(st_language);
 
         Locale locale = new Locale("yue","HK");
@@ -419,8 +426,37 @@ public class MainActivity extends AppCompatActivity {
         return locale;
     }
 
+    public void initTTS(){
+        tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+                final Locale tts_language = localeCallBack();
+                String st_speedrate = DataSupport.find(Wordlist.class,2).getReactionWord();
+                String st_pitch = DataSupport.find(Wordlist.class,3).getReactionWord();
+                float speedrate = Float.parseFloat(st_speedrate);
+                float pitch = Float.parseFloat(st_pitch);
+                tts.setLanguage(tts_language);
+                //if (isFloat(st_speedrate)|isFloat(st_pitch)){
+                //    tts.setSpeechRate(Float.parseFloat(st_speedrate));
+                //    tts.setPitch(Float.parseFloat(st_pitch));
+                //} else {
+                tts.setSpeechRate((float)speedrate);
+                tts.setPitch((float)pitch);
+            }});
+    }
+/*
+    @Override
+    protected void onResume(){
+        super.onResume();
+        initTTS();
+    }
 
-
+    @Override
+    protected void onPause(){
+        super.onPause();
+        tts.shutdown();
+    }
+*/
     @Override
     protected void onDestroy(){
         super.onDestroy();
