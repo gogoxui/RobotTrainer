@@ -11,6 +11,7 @@ public class Wordlist extends DataSupport {
     private String name;
     private String triggerWord;
     private String reactionWord;
+    //private String languageID;
 
     public int getId() {
         return id;
@@ -43,5 +44,10 @@ public class Wordlist extends DataSupport {
     public void setReactionWord(String reactionWord) {
         this.reactionWord = reactionWord;
     }
+
+    //public String getLanguageID() {
+    //    return languageID;}
+
+    //public void setLanguageID(String l){this.languageID = l;}
 
 }

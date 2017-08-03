@@ -37,6 +37,8 @@
             android:layout_marginLeft="10dp"
             android:id="@+id/ed_id"/>
 
+
+
         <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -91,6 +93,13 @@
         android:layout_height="wrap_content"
         android:text="Say"
         android:id="@+id/listen"/>
+
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="stt"
+            android:id="@+id/voice_input"/>
+
     </LinearLayout>
 
 

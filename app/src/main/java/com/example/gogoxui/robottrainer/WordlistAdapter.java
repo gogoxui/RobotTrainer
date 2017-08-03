@@ -24,6 +24,7 @@ public class WordlistAdapter
     private EditText mRegex;
     private EditText mReacion;
     private TextView mId;
+    private EditText mLanguage;
     private int dataSize;
 
 
@@ -42,6 +43,7 @@ public class WordlistAdapter
         mRegex = regex;
         mReacion = reaction;
         mData = data;
+        //mLanguage = language;
         dataSize = mData.size()-1;
 
     }
@@ -73,6 +75,8 @@ public class WordlistAdapter
                 mReacion.setText(wls.get(dataSize-position).getReactionWord());
                 mName.setText(wls.get(dataSize-position).getName());
                 mId.setText(""+ wls.get(dataSize-position).getId());
+                //mLanguage.setText(""+wls.get(dataSize-position).getLanguageID());
+
                 //mName.setText(""+dataSize);
                 //mId.setText(""+position);
                 Toast.makeText(view.getContext(),
